@@ -1,6 +1,6 @@
 from redteam import RedTeam
 
-task = RedTeam('example.org')
-subdomains = task.subdomain_recon()
+engagement = RedTeam('example.org')
+subdomains = engagement.subdomain_recon()
 for subdomain in subdomains:
     print(subdomain)
