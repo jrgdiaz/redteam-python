@@ -9,15 +9,20 @@ class RedTeam:
     
     def __init__(self, domain):
         self.domain = domain
-        print("task domain set too: %s" % (self.domain))
+        print("scope set too: %s" % (self.domain))
     
 
-    #only crt_sh() for now
+    
 
     def subdomain_recon(self):
         
         print ("performing subdomain recon on %s" % (self.domain))
         subdomains = recon.crt_sh(self.domain)
         return subdomains
+    
+    def dnsdumpster(self):
+
+        print ("dnsdumpster diving on %s " % (self.domain))
+        recon.dnsdumpster(self.domain)
 
 
