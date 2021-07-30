@@ -1,6 +1,13 @@
 from redteam import RedTeam
 
-engagement = RedTeam('example.org')
-subdomains = engagement.subdomain_recon()
+x = RedTeam('example.org')
+subdomains = x.subdomain_recon()
+
+print("=====================reconocimiento de activos en base a certificados digitales publicados en internet========================")
+
 for subdomain in subdomains:
     print(subdomain)
+
+print("=====================dns dumpster dive=====================")
+
+x.dnsdumpster()
