@@ -61,3 +61,17 @@ def dnsdumpster(domain):
                 f.close()
                 os.remove("resources/"+local_filename)
                 x.close()
+
+"""
+checks if axfr possible on domain - using hackertarget api
+"""
+
+def dnsaxfr(domain):
+
+    response = requests.get('https://api.hackertarget.com/zonetransfer/?q=%s' % (domain))
+    if "XFR size" in response.text:
+        print("AXFR possible on %s \n dumping dns records on resources folder..." % (domain))
+        x = open("resources/dns_axfr_%s.txt" % (domain),'x')
+        x.write(response.text)
+    else:
+        print("AXFR failed")
