@@ -12,8 +12,6 @@ class RedTeam:
         print("scope set too: %s" % (self.domain))
     
 
-    
-
     def subdomain_recon(self):
         
         print ("performing subdomain recon on %s" % (self.domain))
@@ -24,5 +22,8 @@ class RedTeam:
 
         print ("dnsdumpster diving on %s " % (self.domain))
         recon.dnsdumpster(self.domain)
-
-
+    
+    def dnsaxfr(self):
+        print("dns axfr on %s" % (self.domain))
+        recon.dnsaxfr(self.domain)
+  
