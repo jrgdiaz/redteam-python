@@ -9,7 +9,7 @@ domain = 'example.org'
 x = RedTeam(domain)
 subdomains = x.subdomain_recon()
 # store results in a file
-file_ = open("resources/clickjacking_%s_%s.txt" % (domain, date_time),'x')
+file_ = open("clickjacking_%s_%s.txt" % (domain, date_time),'x')
 for subdomain in subdomains:
     missing_headers = x.xwebheaders(subdomain)
     if 'X-Frame-Options' in missing_headers:
