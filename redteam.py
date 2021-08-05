@@ -34,3 +34,8 @@ class RedTeam:
         print("webserver headers on %s" % (x))
         missing_headers = recon.webheaders(x)
         return missing_headers
+
+    def probewebheaders(self,x):
+        print("webserver headers on %s" % (x))
+        headers = recon.probewebheaders(x)
+        return headers
