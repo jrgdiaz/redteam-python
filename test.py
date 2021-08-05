@@ -11,10 +11,18 @@ subdomains = x.subdomain_recon()
 # store results in a file
 file_ = open("resources\clickjacking_%s_%s.txt" % (domain, date_time),'x')
 for subdomain in subdomains:
-    raw_headers = x.probewebheaders('http://'+subdomain)
-    print(raw_headers)
+    raw_http_headers = x.probewebheaders('http://'+subdomain)
+    raw_https_headers = x.probewebheaders('https://'+subdomain)
+    print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+    print(raw_http_headers)
+    print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+    print(raw_https_headers)
+    print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
     missing_headers = x.xwebheaders(subdomain)
     if 'X-Frame-Options' in missing_headers:
         print(subdomain+" is vulnerable to clickjacking!")
         file_.write(subdomain+" is vulnerable to clickjacking!\n")   
 file_.close()
+
+
+
