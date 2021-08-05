@@ -1,5 +1,7 @@
 # A simple recon module, recon.py
 import requests
+requests.packages.urllib3.disable_warnings(
+requests.packages.urllib3.exceptions.InsecureRequestWarning)
 import re
 import common_actions
 import os
@@ -123,7 +125,7 @@ def probewebheaders(url):
     headers_items = ''
 
     try:
-        response = requests.get(url)
+        response = requests.get(url,verify=False)
         headers_items = response.headers.items()
     except:
         print('could not connect to '+url)
