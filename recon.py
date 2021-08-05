@@ -102,14 +102,30 @@ def dnsaxfr(domain):
         x.close()
     else:
         print("AXFR failed")
-
+#add check to let the dev choose between raw headers from osint or raw headers from direct interaction with webserver using probewebheaders
 def webheaders(domain):
     response = requests.get('https://securityheaders.com/?q=%s&followRedirects=on' % (domain))
-    r = requests.get('https://api.hackertarget.com/httpheaders/?q=%s' % (domain))
+    #r = requests.get('https://api.hackertarget.com/httpheaders/?q=%s' % (domain))
     soup = BeautifulSoup(response.text,'lxml')
-    print("Raw Headers")
-    print(r.text)
+    #print("Raw Headers")
+    #print(r.text)
     missing_ths = [ths.text.strip() for tbody in soup.find_all('tbody')[3:4] for trs in tbody.find_all('tr') for ths in trs.find_all('th') for header in ths] 
     print("Missing Headers")
     print(missing_ths)
     return(missing_ths)
+
+"""
+Recon enumeration
+
+"""
+
+def probewebheaders(url):
+    headers_items = ''
+
+    try:
+        response = requests.get(url)
+        headers_items = response.headers.items()
+    except:
+        print('could not connect to '+url)
+    
+    return headers_items
