@@ -4,8 +4,6 @@ import recon
 class RedTeam:
 
     domain = ''
-
-
     
     def __init__(self, domain):
         self.domain = domain
@@ -26,4 +24,13 @@ class RedTeam:
     def dnsaxfr(self):
         print("dns axfr on %s" % (self.domain))
         recon.dnsaxfr(self.domain)
-  
+
+    def webheaders(self):
+        print("webserver headers on %s" % (self.domain))
+        missing_headers = recon.webheaders(self.domain)
+        return missing_headers
+
+    def xwebheaders(self,x):
+        print("webserver headers on %s" % (x))
+        missing_headers = recon.webheaders(x)
+        return missing_headers
