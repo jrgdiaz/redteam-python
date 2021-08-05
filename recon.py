@@ -4,6 +4,7 @@ import re
 import common_actions
 import os
 from bs4 import BeautifulSoup
+from datetime import datetime
 
 
 """
@@ -63,6 +64,29 @@ def dnsdumpster(domain):
                 x.close()
 
 """
+About the hackertarget api rate limits go to https://hackertarget.com/ip-tools/
+
+50 api calls per day from a single IP
+
+curl -i https://api.hackertarget.com/geoip/?q=1.1.1.1
+
+HTTP/2 200 
+server: nginx
+date: Wed, 27 Jan 2021 21:17:26 GMT
+content-type: text/plain; charset=utf-8
+content-length: 91
+x-api-quota: 51
+x-api-count: 8
+
+IP Address: 1.1.1.1
+Country: Australia
+Latitude: -33.494
+Longitude: 143.2104
+
+"""
+
+
+"""
 checks if axfr possible on domain - using hackertarget api
 """
 
@@ -71,7 +95,21 @@ def dnsaxfr(domain):
     response = requests.get('https://api.hackertarget.com/zonetransfer/?q=%s' % (domain))
     if "XFR size" in response.text:
         print("AXFR possible on %s \n dumping dns records on resources folder..." % (domain))
-        x = open("resources/dns_axfr_%s.txt" % (domain),'x')
+        now = datetime.now() # current date and time
+        date_time = now.strftime("%m%d%Y%H%M%S")
+        x = open("resources/dns_axfr_%s_%s.txt" % (domain, date_time),'x')
         x.write(response.text)
+        x.close()
     else:
         print("AXFR failed")
+
+def webheaders(domain):
+    response = requests.get('https://securityheaders.com/?q=%s&followRedirects=on' % (domain))
+    r = requests.get('https://api.hackertarget.com/httpheaders/?q=%s' % (domain))
+    soup = BeautifulSoup(response.text,'lxml')
+    print("Raw Headers")
+    print(r.text)
+    missing_ths = [ths.text.strip() for tbody in soup.find_all('tbody')[3:4] for trs in tbody.find_all('tr') for ths in trs.find_all('th') for header in ths] 
+    print("Missing Headers")
+    print(missing_ths)
+    return(missing_ths)
