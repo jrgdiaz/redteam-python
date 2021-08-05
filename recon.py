@@ -9,7 +9,7 @@ from datetime import datetime
 
 """
 OSINT
-
+some of these functions make use of external API's so there are some limits in some cases
 """
 
 """
