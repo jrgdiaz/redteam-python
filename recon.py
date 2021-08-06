@@ -5,6 +5,7 @@ requests.packages.urllib3.exceptions.InsecureRequestWarning)
 import re
 import common_actions
 import os
+import urllib.parse
 from bs4 import BeautifulSoup
 from datetime import datetime
 
@@ -115,6 +116,18 @@ def webheaders(domain):
     print("Missing Headers")
     print(missing_ths)
     return(missing_ths)
+
+def urlextract(url):
+    headers = requests.utils.default_headers()
+    headers.update(
+    {
+        'User-Agent': 'python',
+    }
+    )
+    response = requests.get('https://urlextractor.net/?target_url=%s&href=1&link_type=all&image=1&meta=1&extract=Extract+Links' % (urllib.parse.quote(url, safe='')),headers=headers)
+    soup = BeautifulSoup(response.text,'lxml')
+    links = [links['href'] for tbody in soup.find_all('tbody') for trs in tbody.find_all('tr') for tds in trs.find_all('td') for links in tds.find_all('a',href=True)]
+    return links
 
 """
 Recon enumeration
