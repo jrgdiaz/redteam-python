@@ -39,3 +39,10 @@ class RedTeam:
         print("webserver headers on %s" % (x))
         headers = recon.probewebheaders(x)
         return headers
+
+    def urlextract(self,x):
+        print("extracting urls from %s" % (x))
+        links = recon.urlextract(x)
+        return links
+
+
