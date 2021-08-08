@@ -1,14 +1,14 @@
 # redteam-python module
-import recon 
+import recon
+import common_actions
 
 class RedTeam:
 
     domain = ''
     
-    def __init__(self, domain):
+    def __init__(self, domain=None):
         self.domain = domain
         print("scope set too: %s" % (self.domain))
-    
 
     def subdomain_recon(self):
         
@@ -16,8 +16,7 @@ class RedTeam:
         subdomains = recon.crt_sh(self.domain)
         return subdomains
     
-    def dnsdumpster(self):
-
+    def dnsdumpster(self,x=None):
         print ("dnsdumpster diving on %s " % (self.domain))
         recon.dnsdumpster(self.domain)
     
@@ -44,5 +43,9 @@ class RedTeam:
         print("extracting urls from %s" % (x))
         links = recon.urlextract(x)
         return links
+
+
+
+
 
 
