@@ -108,6 +108,8 @@ def dnsaxfr(domain):
 
 def webheaders(domain):
     missing = []
+    warnings = []
+    results = []
     response = requests.get('https://securityheaders.com/?q=%s&followRedirects=on' % (domain))
     soup = BeautifulSoup(response.text,'lxml')
     report_sections = [report_sections for report_sections in soup.find_all('div',{"class": "reportSection"})]
@@ -117,13 +119,14 @@ def webheaders(domain):
             if report_title == 'Raw Headers':
                 print('\nRaw Headers:\n')
                 common_actions.scrape_data_from_security_headers(report_section)
-            elif report_title == 'Missing Headers':
+            if report_title == 'Missing Headers':
                 print('\nMissing Headers:\n')
                 missing = common_actions.scrape_data_from_security_headers(report_section,report_title)
-            elif report_title == 'Warnings':
+            if report_title == 'Warnings':
                 print('\nWarnings:\n')
-                common_actions.scrape_data_from_security_headers(report_section)
-    return missing
+                warnings = common_actions.scrape_data_from_security_headers(report_section,report_title)
+    results = missing + warnings
+    return results
 
 def urlextract(url):
     headers = requests.utils.default_headers()
