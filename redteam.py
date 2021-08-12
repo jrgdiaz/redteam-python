@@ -24,14 +24,13 @@ class RedTeam:
         print("dns axfr on %s" % (self.domain))
         recon.dnsaxfr(self.domain)
 
-    def webheaders(self):
-        print("webserver headers on %s" % (self.domain))
-        missing_headers = recon.webheaders(self.domain)
-        return missing_headers
-
-    def xwebheaders(self,x):
-        print("webserver headers on %s" % (x))
-        missing_headers = recon.webheaders(x)
+    def xwebheaders(self,x=None):
+        if x is None:
+            print("webserver headers on %s" % (self.domain))
+            missing_headers = recon.webheaders(self.domain)
+        else:
+            print("webserver headers on %s" % (x+"/"))
+            missing_headers = recon.webheaders(x+"/")
         return missing_headers
 
     def probewebheaders(self,x):
@@ -43,6 +42,8 @@ class RedTeam:
         print("extracting urls from %s" % (x))
         links = recon.urlextract(x)
         return links
+
+
 
 
 
