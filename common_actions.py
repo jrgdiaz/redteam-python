@@ -21,4 +21,18 @@ def download_file(url):
                 f.write(chunk)
     return local_filename
 
+def scrape_data_from_security_headers(report_section,report_title=''):
+    data = [data.text.strip() for tbody in report_section.find_all('tbody') for trs in tbody.find_all('tr') for data in trs.find_all(['th','td'])]
+    headers = [data[i] for i in range(len(data)) if i % 2 == 1]
+    values = [data[i] for i in range(len(data)) if i % 2 == 0]
+    raw = [(values[i],headers[i]) for i in range(0, len(headers))]
+    for header in raw:
+        print(header)
+    if report_title == '' :
+        return_list = []
+    else:
+        return_list = values
+    return return_list
+        
+
 
