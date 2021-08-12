@@ -1,4 +1,4 @@
-#proof of concept to find potentially "UI-Redressable" subdomains using OSINT module
+#proof of concept script to find potentially "UI-Redressable" and unencrypted HTTP subdomains using OSINT module
 
 from redteam import RedTeam
 from datetime import datetime
@@ -8,21 +8,19 @@ date_time = now.strftime("%m%d%Y%H%M%S")
 domain = 'example.org'
 x = RedTeam(domain)
 subdomains = x.subdomain_recon()
-# store results in a file
 file_ = open("resources\clickjacking_%s_%s.txt" % (domain, date_time),'x')
+file2_ = open("resources\http_%s_%s.txt" % (domain,date_time),'x') 
 for subdomain in subdomains:
-    raw_http_headers = x.probewebheaders('http://'+subdomain)
-    raw_https_headers = x.probewebheaders('https://'+subdomain)
-    print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
-    print(raw_http_headers)
-    print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
-    print(raw_https_headers)
-    print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
-    missing_headers = x.xwebheaders(subdomain)
-    if 'X-Frame-Options' in missing_headers:
+    results = x.xwebheaders(subdomain)
+    if 'X-Frame-Options' in results:
         print(subdomain+" is vulnerable to clickjacking!")
-        file_.write(subdomain+" is vulnerable to clickjacking!\n")   
+        file_.write(subdomain+" is vulnerable to clickjacking!\n")
+    if 'Site is using HTTP' in results:   
+        print(subdomain+" is using HTTP!")
+        file2_.write(subdomain+" is using HTTP!\n")
 file_.close()
+file2_.close()
+   
 
 
 
