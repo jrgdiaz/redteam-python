@@ -105,17 +105,25 @@ def dnsaxfr(domain):
         x.close()
     else:
         print("AXFR failed")
-#add check to let the dev choose between raw headers from osint or raw headers from direct interaction with webserver using probewebheaders
+
 def webheaders(domain):
+    missing = []
     response = requests.get('https://securityheaders.com/?q=%s&followRedirects=on' % (domain))
-    #r = requests.get('https://api.hackertarget.com/httpheaders/?q=%s' % (domain))
     soup = BeautifulSoup(response.text,'lxml')
-    #print("Raw Headers")
-    #print(r.text)
-    missing_ths = [ths.text.strip() for tbody in soup.find_all('tbody')[3:4] for trs in tbody.find_all('tr') for ths in trs.find_all('th') for header in ths] 
-    print("Missing Headers")
-    print(missing_ths)
-    return(missing_ths)
+    report_sections = [report_sections for report_sections in soup.find_all('div',{"class": "reportSection"})]
+    for report_section in report_sections:
+        report_titles = [report_titles.text.strip() for report_titles in report_section.find_all('div',{"class":"reportTitle"})]
+        for report_title in report_titles:
+            if report_title == 'Raw Headers':
+                print('\nRaw Headers:\n')
+                common_actions.scrape_data_from_security_headers(report_section)
+            elif report_title == 'Missing Headers':
+                print('\nMissing Headers:\n')
+                missing = common_actions.scrape_data_from_security_headers(report_section,report_title)
+            elif report_title == 'Warnings':
+                print('\nWarnings:\n')
+                common_actions.scrape_data_from_security_headers(report_section)
+    return missing
 
 def urlextract(url):
     headers = requests.utils.default_headers()
@@ -140,6 +148,8 @@ def probewebheaders(url):
     try:
         response = requests.get(url,verify=False)
         headers_items = response.headers.items()
+        for headers_item in headers_items:
+            print(headers_item)
     except:
         print('could not connect to '+url)
     
