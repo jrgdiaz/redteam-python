@@ -46,7 +46,3 @@ class RedTeam:
 
 
 
-
-
-
-
