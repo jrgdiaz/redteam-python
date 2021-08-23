@@ -1,2 +1,1 @@
-implement directory bruteforcing function in recon module.
-it should be able to support multiple urls simultaneously (multithread)
+implement directory bruteforcing function in recon module. it should be able to support multiple urls simultaneously (multithread)
