@@ -7,5 +7,6 @@ date_time = now.strftime("%m%d%Y%H%M%S")
 domain = 'example.org'
 x = RedTeam(domain)
 subdomains = x.subdomain_recon()
+#subdomain bruteforcing on all subdomains
 tasks = [lambda subdomain=subdomain: x.dir_bruter("http://"+subdomain,wordlist_file) for subdomain in subdomains]
 workspace.run_io_tasks_in_parallel(tasks)
