@@ -1,4 +1,5 @@
 import requests
+import queue
 import os
 
 def download_file(url):
@@ -37,6 +38,25 @@ def scrape_data_from_security_headers(report_section,report_title=''):
         return_list = return_list + values
     return return_list
         
-        
+def build_wordlist(wordlst_file):
+    # read in the word list
+    resume = None
+    fd = open(wordlst_file, "r")
+    raw_words = [line.rstrip('\n') for line in fd]
+    raw_words = [word.lstrip("/") for word in raw_words] 
+    fd.close()
 
+    found_resume = False
+    words = queue.Queue()
 
+    for word in raw_words:
+        if resume:
+            if found_resume:
+                words.put(word)
+            else:
+                if word == resume:
+                    found_resume = True
+                    print("Resuming wordlist from: %s" % resume)
+        else:
+            words.put(word)
+    return words
