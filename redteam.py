@@ -2,6 +2,7 @@
 import recon
 import common_actions
 
+
 class RedTeam:
 
     domain = ''
@@ -42,7 +43,8 @@ class RedTeam:
         print("extracting urls from %s" % (x))
         links = recon.urlextract(x)
         return links
-
-
-
-
+    
+    def dir_bruter(self,x,wordlist_file,extensions=None):
+        print("directory bruteforcing on %s" %(x))
+        word_queue = common_actions.build_wordlist(wordlist_file)
+        recon.dir_bruter(x,word_queue,extensions)
