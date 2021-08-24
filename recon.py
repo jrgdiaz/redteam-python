@@ -6,6 +6,7 @@ import re
 import common_actions
 import os
 import urllib.parse
+import urllib.error
 from bs4 import BeautifulSoup
 from datetime import datetime
 
@@ -157,3 +158,48 @@ def probewebheaders(url):
         print('could not connect to '+url)
     
     return headers_items
+
+def dir_bruter(target_url,word_queue,extensions=None):
+    now = datetime.now() # get current date and time
+    date_time = now.strftime("%m%d%Y%H%M%S")
+    
+    user_agent = "Mozilla/5.0 (X11; Linux x86_64; rv:19.0) " \
+             "Gecko/20100101 " \
+             "Firefox/19.0"
+    while not word_queue.empty():
+        attempt = word_queue.get()
+        attempt_list = []
+
+        # check if there is a file extension if not
+        # it's a directory path we're bruting
+        if "." not in attempt:
+            attempt_list.append("/%s/" % attempt)
+        else:
+            attempt_list.append("/%s" % attempt)
+
+        # if we want to bruteforce extensions
+        if extensions:
+            for extension in extensions:
+                attempt_list.append("/%s%s" % (attempt, extension))
+
+        # iterate over our list of attempts        
+        for brute in attempt_list:
+            file_ = open("resources/directory_bf_%s.txt" % (target_url.replace("://","")),'a')
+            url = "%s%s" % (target_url, urllib.parse.quote(brute))
+            print(brute)
+            try:
+                headers = {"User-Agent": user_agent}
+                r = urllib.request.Request(url, headers=headers)
+                response = urllib.request.urlopen(r)
+                if len(response.read()):
+                    print("[%d] => %s" % (response.code, url))
+                    
+                    file_.write("[%d] => %s" % (response.code, url)+"\n")
+                    file_.close()
+            except urllib.error.HTTPError as e:
+                if e.code != 404:
+                    print("!!! %d => %s" % (e.code, url))
+                    
+                    file_.write("[%d] => %s" % (e.code, url)+"\n")
+                    file_.close()
+                pass
