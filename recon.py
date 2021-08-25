@@ -9,6 +9,8 @@ import urllib.parse
 import urllib.error
 from bs4 import BeautifulSoup
 from datetime import datetime
+import binascii
+
 
 
 """
@@ -159,13 +161,40 @@ def probewebheaders(url):
     
     return headers_items
 
-def dir_bruter(target_url,word_queue,extensions=None):
+def dir_bruter(target_url,word_queue,extensions=None,wildcard=True):
+    bad_code = [404]
+    random_bytes = binascii.b2a_hex(os.urandom(15))
+    encoding='utf-8'
     now = datetime.now() # get current date and time
     date_time = now.strftime("%m%d%Y%H%M%S")
     
     user_agent = "Mozilla/5.0 (X11; Linux x86_64; rv:19.0) " \
              "Gecko/20100101 " \
              "Firefox/19.0"
+    print ("looking for bad response codes in: "+target_url+"/"+str(random_bytes,encoding))
+
+    try:
+        headers = {"User-Agent": user_agent}
+        r = urllib.request.Request(target_url+"/"+str(random_bytes,encoding), headers=headers)
+        response = urllib.request.urlopen(r)
+        if len(response.read()) and response.code not in bad_code:
+            print("we got [%d] on random directory marking it as bad code => %s" % (response.code, target_url))
+            bad_code.append(response.code)
+            #if wildcard flag is true kill worker and suggest we should manually inspect the webserver.
+            if not wildcard:
+                file_ = open("resources/directory_bf_%s.txt" % (target_url.replace("://","")),'a')
+                file_.write("wildcard flag is Off. Manually inspect this host "+target_url)
+                file_.close()
+                print("wildcard flag is Off. Manually inspect this host "+target_url+"\n killing worker")
+                exit()
+    except urllib.error.HTTPError as e:
+        if e.code == 404:
+            print("good no bad code %d => %s" % (e.code, target_url+"/"+str(random_bytes,encoding)))
+        pass
+    except urllib.error.URLError as i:
+        print(target_url+":"+str(i)+"\n killing worker")
+        exit()
+
     while not word_queue.empty():
         attempt = word_queue.get()
         attempt_list = []
@@ -186,20 +215,18 @@ def dir_bruter(target_url,word_queue,extensions=None):
         for brute in attempt_list:
             file_ = open("resources/directory_bf_%s.txt" % (target_url.replace("://","")),'a')
             url = "%s%s" % (target_url, urllib.parse.quote(brute))
-            print(brute)
             try:
                 headers = {"User-Agent": user_agent}
                 r = urllib.request.Request(url, headers=headers)
                 response = urllib.request.urlopen(r)
-                if len(response.read()):
+                if len(response.read()) and response.code not in bad_code:
                     print("[%d] => %s" % (response.code, url))
-                    
                     file_.write("[%d] => %s" % (response.code, url)+"\n")
                     file_.close()
             except urllib.error.HTTPError as e:
-                if e.code != 404:
+                if e.code not in bad_code:
                     print("!!! %d => %s" % (e.code, url))
-                    
                     file_.write("[%d] => %s" % (e.code, url)+"\n")
                     file_.close()
                 pass
+
