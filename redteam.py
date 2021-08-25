@@ -44,7 +44,8 @@ class RedTeam:
         links = recon.urlextract(x)
         return links
     
-    def dir_bruter(self,x,wordlist_file,extensions=None):
+    def dir_bruter(self,x,wordlist_file,extensions=None,wildcard=True):
         print("directory bruteforcing on %s" %(x))
         word_queue = common_actions.build_wordlist(wordlist_file)
-        recon.dir_bruter(x,word_queue,extensions)
+        recon.dir_bruter(x,word_queue,extensions,wildcard)
+
