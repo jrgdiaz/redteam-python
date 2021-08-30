@@ -1,6 +1,7 @@
 # redteam-python module
 import recon
 import common_actions
+from concurrent.futures import ThreadPoolExecutor
 
 
 class RedTeam:
@@ -48,4 +49,16 @@ class RedTeam:
         print("directory bruteforcing on %s" %(x))
         word_queue = common_actions.build_wordlist(wordlist_file)
         recon.dir_bruter(x,word_queue,extensions,wildcard)
+    
+    def run_io_tasks_in_parallel(self,tasks,max_workers):
+        with ThreadPoolExecutor(max_workers=max_workers) as executor: 
+            running_tasks = [executor.submit(task) for task in tasks]
+            for running_task in running_tasks:
+                running_task.result()
 
+    """
+        run_io_tasks_in_parallel([
+        lambda: print('IO task 1 running!'),
+        lambda: print('IO task 2 running!'),
+        ])
+"""
