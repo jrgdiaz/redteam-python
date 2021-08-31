@@ -1,6 +1,7 @@
 # redteam-python module
 import recon
 import common_actions
+from metagoofil import Metagoofil
 from concurrent.futures import ThreadPoolExecutor
 
 
@@ -62,3 +63,48 @@ class RedTeam:
         lambda: print('IO task 2 running!'),
         ])
 """
+    def metagoofil(self,
+        x=None,
+        delay=30.0,
+        save_links=False,
+        url_timeout=15,
+        search_max=100,
+        download_file_limit=100,
+        save_directory="resources/",
+        number_of_threads=8,
+        file_types=['pdf','doc','xls','ppt','odp','ods','docx','xlsx','pptx'],
+        user_agent='Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
+        download_files=False,
+    
+    ):
+        if x is None:
+            mg = Metagoofil(self.domain,
+            delay,
+            save_links,
+            url_timeout,
+            search_max,
+            download_file_limit,
+            save_directory,
+            number_of_threads,
+            file_types,
+            user_agent,
+            download_files,
+            )
+            mg.go()
+            print("[+] Done!")
+        else:
+            mg = Metagoofil(
+            x,
+            delay,
+            save_links,
+            url_timeout,
+            search_max,
+            download_file_limit,
+            save_directory,
+            number_of_threads,
+            file_types,
+            user_agent,
+            download_files,
+            )
+            mg.go()
+            print("[+] Done!")
