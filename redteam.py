@@ -108,3 +108,7 @@ class RedTeam:
             )
             mg.go()
             print("[+] Done!")
+
+    def googledork(self,query):
+        hits = recon.googledork(query)
+        return hits
