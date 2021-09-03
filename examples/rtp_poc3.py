@@ -1,3 +1,5 @@
+#proof of concept script to bruteforce webserver directories massively using recon module
+
 from redteam import RedTeam
 from datetime import datetime
 
