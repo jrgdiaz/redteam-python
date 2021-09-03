@@ -10,7 +10,7 @@ import urllib.error
 from bs4 import BeautifulSoup
 from datetime import datetime
 import binascii
-
+import googlesearch
 
 
 """
@@ -229,4 +229,33 @@ def dir_bruter(target_url,word_queue,extensions=None,wildcard=True):
                     file_.write("[%d] => %s" % (e.code, url)+"\n")
                     file_.close()
                 pass
+
+def googledork(query):
+     # perform a single google dork query
+    files =[]
+    print(
+                f"[*] Searching for your Google Dork query!"
+            )
+    try:
+        for url in googlesearch.search(
+                    query,
+                    start=0,
+                    stop=100,
+                    num=100,
+                    pause=120,
+                    extra_params={"filter": "0"},
+                    user_agent="Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)",
+                ):
+                    files.append(url)
+
+    except Exception as e:
+            print(f"[-] EXCEPTION: {e}")
+            if e.code == 429:
+                print(
+                       "google blocked us!"
+                    )
+                print("[*] Exiting for now...")
+                sys.exit(1)
+    return files
+
 
