@@ -4,6 +4,7 @@ python module that facilitates the orchestration of redteam engagements
 Features so far:
 
 Recon capabilities:
+
   -DNS and subdomain enumeration
   
   -Web Header enumeration
