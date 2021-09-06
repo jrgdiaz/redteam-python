@@ -3,6 +3,7 @@ import requests
 requests.packages.urllib3.disable_warnings(
 requests.packages.urllib3.exceptions.InsecureRequestWarning)
 import re
+import ssl
 import common_actions
 import os
 import urllib.parse
@@ -176,7 +177,7 @@ def dir_bruter(target_url,word_queue,extensions=None,wildcard=True):
     try:
         headers = {"User-Agent": user_agent}
         r = urllib.request.Request(target_url+"/"+str(random_bytes,encoding), headers=headers)
-        response = urllib.request.urlopen(r)
+        response = urllib.request.urlopen(r,context=ssl.SSLContext())
         if len(response.read()) and response.code not in bad_code:
             print("we got [%d] on random directory marking it as bad code => %s" % (response.code, target_url))
             bad_code.append(response.code)
@@ -218,7 +219,7 @@ def dir_bruter(target_url,word_queue,extensions=None,wildcard=True):
             try:
                 headers = {"User-Agent": user_agent}
                 r = urllib.request.Request(url, headers=headers)
-                response = urllib.request.urlopen(r)
+                response = urllib.request.urlopen(r,context=ssl.SSLContext())
                 if len(response.read()) and response.code not in bad_code:
                     print("[%d] => %s" % (response.code, url))
                     file_.write("[%d] => %s" % (response.code, url)+"\n")
@@ -257,5 +258,3 @@ def googledork(query):
                 print("[*] Exiting for now...")
                 sys.exit(1)
     return files
-
-
