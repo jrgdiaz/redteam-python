@@ -1,4 +1,4 @@
-proof of concept script to find potentially "UI-Redressable" and unencrypted HTTP subdomains using OSINT module
+#proof of concept script to find potentially "UI-Redressable" and unencrypted HTTP subdomains using OSINT module
 
 from redteam import RedTeam
 from datetime import datetime
