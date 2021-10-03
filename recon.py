@@ -144,6 +144,17 @@ def urlextract(url):
     links = [links['href'] for tbody in soup.find_all('tbody') for trs in tbody.find_all('tr') for tds in trs.find_all('td') for links in tds.find_all('a',href=True)]
     return links
 
+
+def getLinks(url):
+        html_page = requests.get(url,verify=False)
+        soup = BeautifulSoup(html_page.text,'lxml')
+        links = []
+
+        for link in soup.findAll('a', attrs = {'href': re.compile("^htt(p|ps)://")}):
+                links.append(link.get('href'))
+        return links
+
+
 """
 Recon enumeration
 
