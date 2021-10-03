@@ -45,6 +45,11 @@ class RedTeam:
         print("extracting urls from %s" % (x))
         links = recon.urlextract(x)
         return links
+
+    def getLinks(self,x):
+        print("extracting urls from %s" %(x))
+        links = recon.getLinks(x)
+        return links
     
     def dir_bruter(self,x,wordlist_file,extensions=None,wildcard=True):
         print("directory bruteforcing on %s" %(x))
