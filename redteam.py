@@ -56,6 +56,11 @@ class RedTeam:
         word_queue = common_actions.build_wordlist(wordlist_file)
         recon.dir_bruter(x,word_queue,extensions,wildcard)
     
+    def forward_dns_bruter(self,x,wordlist_file):
+        print("forward dns bruteforcing on %s" %(x))
+        word_queue = common_actions.build_wordlist(wordlist_file)
+        recon.forward_dns_bruter(x,word_queue)
+    
     def run_io_tasks_in_parallel(self,tasks,max_workers):
         with ThreadPoolExecutor(max_workers=max_workers) as executor: 
             running_tasks = [executor.submit(task) for task in tasks]
