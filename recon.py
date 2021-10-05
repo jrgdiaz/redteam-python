@@ -12,6 +12,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 import binascii
 import googlesearch
+import dns.resolver
 
 
 """
@@ -242,6 +243,30 @@ def dir_bruter(target_url,word_queue,extensions=None,wildcard=True):
                     file_.close()
                 pass
 
+def forward_dns_bruter(domain,word_queue):
+
+    while not word_queue.empty():
+        attempt = word_queue.get()
+        attempt_list = []
+        attempt_list.append(attempt)
+
+        # iterate over our list of attempts        
+        for brute in attempt_list:
+            file_ = open("resources/forward_dns_bf_%s.txt" % (domain),'a')
+            subdomain = "%s.%s" % (brute, domain)
+            print(subdomain)
+            try:
+                answers = dns.resolver.query(subdomain, 'A')
+                print("!!! %s" % (subdomain))
+                file_.write("[%s]" % (subdomain)+"\n")
+
+            except dns.resolver.NXDOMAIN:
+                pass
+            except dns.resolver.Timeout:
+                pass
+            except dns.resolver.NoAnswer:
+                pass
+
 def googledork(query):
      # perform a single google dork query
     files =[]
@@ -269,3 +294,6 @@ def googledork(query):
                 print("[*] Exiting for now...")
                 sys.exit(1)
     return files
+
+
+
