@@ -60,6 +60,10 @@ class RedTeam:
         print("forward dns bruteforcing on %s" %(x))
         word_queue = common_actions.build_wordlist(wordlist_file)
         recon.forward_dns_bruter(x,word_queue)
+
+    def reverse_dns_bruter(self,domain,ip_ranges,inDomain):
+        print("reverse dns bruteforcing on %s" %(str(ip_ranges)))
+        recon.reverse_dns_bruter(domain,ip_ranges,inDomain)
     
     def run_io_tasks_in_parallel(self,tasks,max_workers):
         with ThreadPoolExecutor(max_workers=max_workers) as executor: 
