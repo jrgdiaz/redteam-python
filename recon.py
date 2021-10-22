@@ -14,6 +14,8 @@ import binascii
 import googlesearch
 import dns.resolver
 import sys
+import ipcalc
+import socket
 
 
 """
@@ -267,6 +269,23 @@ def forward_dns_bruter(domain,word_queue):
                 pass
             except dns.resolver.NoAnswer:
                 pass
+
+def reverse_dns_bruter(domain,ip_ranges,inDomain):
+    for ip_range in ip_ranges:
+        for ip in ipcalc.Network(ip_range):
+            file_ = open("resources/reverse_dns_bf_%s.txt" % (domain),'a')
+            try:
+                name, alias, addresslist = socket.gethostbyaddr(str(ip))
+                if inDomain:
+                    if domain in name:
+                        print("!!! %s %s" % (name,str(ip)))
+                        file_.write("[%s %s]" % (name,str(ip))+"\n")
+                else:
+                    print("!!! %s %s" % (name,str(ip)))
+                    file_.write("[%s %s]" % (name,str(ip))+"\n")
+            except socket.herror:
+                pass
+
 
 def googledork(query):
      # perform a single google dork query
