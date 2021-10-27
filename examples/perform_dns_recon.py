@@ -22,9 +22,8 @@ for cell in sheet_ranges['B']:
 ip_list = list(dict.fromkeys(ip_list))
 for ip in ip_list:
     asn_cidr_list.append(get_asn_cidr(ip))
-
+asn_cidr_list = list(dict.fromkeys(asn_cidr_list))
 wordlist_file = "namelist.txt"
-
 x.run_io_tasks_in_parallel([
         lambda: x.dnsaxfr(),
         lambda: x.forward_dns_bruter(domain,wordlist_file),
