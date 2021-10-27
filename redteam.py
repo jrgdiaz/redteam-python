@@ -21,7 +21,8 @@ class RedTeam:
     
     def dnsdumpster(self,x=None):
         print ("dnsdumpster diving on %s " % (self.domain))
-        recon.dnsdumpster(self.domain)
+        filename = recon.dnsdumpster(self.domain)
+        return filename
     
     def dnsaxfr(self):
         print("dns axfr on %s" % (self.domain))
