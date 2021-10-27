@@ -49,7 +49,6 @@ fetches data from dnsdumpster for URL
 """
 def dnsdumpster(domain):
     
-    
     r = requests.get('https://dnsdumpster.com/')
     csrftoken = r.cookies['csrftoken']
     
@@ -73,6 +72,10 @@ def dnsdumpster(domain):
                 f.close()
                 os.remove("resources/"+local_filename)
                 x.close()
+            else:
+                excel_filename = local_filename
+    return excel_filename
+    
 
 """
 About the hackertarget api rate limits go to https://hackertarget.com/ip-tools/
