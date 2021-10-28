@@ -153,13 +153,15 @@ def urlextract(url):
 
 
 def getLinks(url):
+    links = []
+    try:
         html_page = requests.get(url,verify=False)
         soup = BeautifulSoup(html_page.text,'lxml')
-        links = []
-
         for link in soup.findAll('a', attrs = {'href': re.compile("^htt(p|ps)://")}):
-                links.append(link.get('href'))
-        return links
+            links.append(link.get('href'))
+    except (requests.exceptions.SSLError,requests.exceptions.ConnectionError):
+        print("ssl or connection error!")
+    return links
 
 
 """
