@@ -274,6 +274,8 @@ def forward_dns_bruter(domain,word_queue):
                 pass
             except dns.resolver.NoAnswer:
                 pass
+            except dns.resolver.NoNameservers:
+                pass
 
 def reverse_dns_bruter(domain,ip_ranges,inDomain):
     for ip_range in ip_ranges:
