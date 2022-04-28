@@ -12,15 +12,18 @@ parser.add_argument("-l", "--list",
                     action='store')
 args = parser.parse_args()
 domains = []
+
 if args.domain:
     domains.append(args.domain)
-    if args.usedlist:
-        with open(args.usedlist, "r",encoding='utf-8') as f:
-            for i in f.readlines():
-                i = i.strip()
-                if i == "" or i.startswith("#"):
-                    continue
-                domains.append(i)
+
+if args.usedlist:
+    with open(args.usedlist, "r",encoding='utf-8') as f:
+        for i in f.readlines():
+            i = i.strip()
+            if i == "" or i.startswith("#"):
+                continue
+            domains.append(i)
+
 for domain in domains:
     rt = RedTeam(domain)
     rt.dnsdumpster()
