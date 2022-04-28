@@ -51,7 +51,7 @@ def dnsdumpster(domain):
     
     r = requests.get('https://dnsdumpster.com/')
     csrftoken = r.cookies['csrftoken']
-    
+    excel_filename = ''
     s = BeautifulSoup(r.text,'lxml')
     csrf_token=s.find("input",{"name":"csrfmiddlewaretoken"})['value']
     cookies = {'csrftoken':csrf_token}
